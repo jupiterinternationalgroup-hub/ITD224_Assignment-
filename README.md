@@ -3,6 +3,8 @@
 **Author:** Tan Tien Hock (Alan) | Student ID: 6968437D
 **Module:** ITD224 Applied Data Science Project | **Framework:** CRISP-DM
 
+🌐 **[View Live Project Site](https://jupiterinternationalgroup-hub.github.io/ITD224_Assignment-/)**
+
 ---
 
 ## 1. Project Background
