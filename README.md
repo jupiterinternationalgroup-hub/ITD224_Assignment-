@@ -97,5 +97,8 @@ Predictions should be treated as **directional pricing guidance**, not precise v
   amenity_sources_audit_report.csv            (data provenance / enrichment audit trail, 9,997 rows x 31 columns)
 /visualisation
   condo_rental_map.html                       (interactive Folium map of geocoded rental locations)
+/docs
+  index.html                                   (live GitHub Pages homepage)
+  map.html                                     (interactive GPS map, linked from homepage)
 README.md
 ```
