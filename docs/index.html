@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Condominium Rental Rate Prediction | ITD224 Project</title>
+<style>
+  :root {
+    --primary: #1a3a5c;
+    --accent: #2e86ab;
+    --bg: #f7f9fb;
+    --card: #ffffff;
+    --text: #1f2933;
+    --muted: #5b6b79;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    padding: 60px 20px 40px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 10px; font-size: 2.2rem; }
+  header p { margin: 4px 0; opacity: 0.9; font-size: 1.05rem; }
+  .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-top: 12px;
+  }
+  nav {
+    background: var(--primary);
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 14px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    opacity: 0.85;
+  }
+  nav a:hover { opacity: 1; text-decoration: underline; }
+  main { max-width: 960px; margin: 0 auto; padding: 40px 20px 80px; }
+  section { margin-bottom: 56px; }
+  h2 {
+    color: var(--primary);
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 8px;
+    font-size: 1.6rem;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+  }
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .metric {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-top: 4px solid var(--accent);
+  }
+  .metric .value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+  .metric .label { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid #e3e8ee; }
+  th { background: #eef3f7; color: var(--primary); }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+  .btn:hover { background: var(--primary); }
+  .stack { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .pill {
+    background: #eef3f7;
+    color: var(--primary);
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 0.85rem;
+  }
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Condominium Rental Rate Prediction</h1>
+  <p>Singapore Real Estate Intelligence Platform &mdash; Individual Workstream</p>
+  <p>Tan Tien Hock (Alan) | Student ID: 6968437D | ITD224 Applied Data Science Project</p>
+  <span class="badge">CRISP-DM Framework</span>
+</header>
+
+<nav>
+  <a href="#background">Background</a>
+  <a href="#work">Work Accomplished</a>
+  <a href="#recommendations">Recommendations</a>
+  <a href="#ethics">AI Ethics</a>
+  <a href="map.html">Interactive Map</a>
+</nav>
+
+<main>
+
+  <section id="background">
+    <h2>1. Project Background</h2>
+    <div class="card">
+      <p>The Singapore Real Estate Intelligence Platform helps a Singapore real estate agency make better pricing, rental, and customer-targeting decisions using ML. This workstream focuses on <strong>predicting monthly condominium rental prices</strong> and identifying key pricing factors.</p>
+      <p><strong>Dataset:</strong> CondoRental.csv &mdash; 10,000 URA Executive Condominium rental transactions (postal districts 18&ndash;28), enriched with GPS coordinates and amenity distances via Singapore's OneMap API.</p>
+      <p><strong>Success Criteria:</strong> Materially lower MAE/RMSE than a naive district-average baseline, with an interpretable feature-importance ranking the agency can act on.</p>
+    </div>
+  </section>
+
+  <section id="work">
+    <h2>2. Work Accomplished</h2>
+    <div class="card">
+      <h3 style="color: var(--accent); margin-top:0;">Data Preparation</h3>
+      <ul>
+        <li>Cleaned currency strings, banded floor-area ranges, and abbreviated lease dates.</li>
+        <li>Imputed 3 missing bedroom values (0.03%) using median within matching floor-area bands.</li>
+        <li>Flagged rent outliers via 1.5&times;IQR rule &mdash; retained as genuine premium transactions.</li>
+        <li>Enriched via OneMap API: GPS coordinates, MRT/supermarket/school distances, true building age.</li>
+      </ul>
+      <h3 style="color: var(--accent);">Modelling</h3>
+      <ul>
+        <li>Compared Linear Regression, Random Forest, and XGBoost pipelines.</li>
+        <li>Validated via 5-fold cross-validation, not just a single train-test split.</li>
+        <li>Tuned all three model families via GridSearchCV before final selection.</li>
+      </ul>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="value">$456</div><div class="label">MAE (XGBoost)</div></div>
+      <div class="metric"><div class="value">$622</div><div class="label">RMSE</div></div>
+      <div class="metric"><div class="value">0.352</div><div class="label">R&sup2; Score</div></div>
+      <div class="metric"><div class="value">18.5%</div><div class="label">MAE Improvement vs Baseline</div></div>
+    </div>
+  </section>
+
+  <section id="recommendations">
+    <h2>3. Recommendation and Analysis</h2>
+    <div class="card">
+      <p><strong>Key Finding:</strong> Unit size (bedroom count) dominates rent prediction, accounting for roughly three-quarters of total feature importance. Location-convenience features contribute a secondary signal.</p>
+      <table>
+        <tr><th>Stakeholder</th><th>Recommendation</th></tr>
+        <tr><td>Landlords</td><td>Anchor asking rent to predicted rent &plusmn; MAE band ($456), not gut feel.</td></tr>
+        <tr><td>Agencies</td><td>Screen listings pre-publication; flag rents outside the MAE band.</td></tr>
+        <tr><td>Tenants</td><td>Benchmark quoted rent against district-summary table for negotiation leverage.</td></tr>
+      </table>
+      <p><strong>Limitation:</strong> R&sup2; = 0.352 reflects genuine data constraints (weak correlations, URA privacy banding, missing unit-quality signals) &mdash; predictions are directional guidance, not precise valuations.</p>
+    </div>
+  </section>
+
+  <section id="ethics">
+    <h2>4. AI Ethics Considerations</h2>
+    <div class="card">
+      <table>
+        <tr><th>Dimension</th><th>Discussion</th></tr>
+        <tr><td>Privacy</td><td>Building-level identifiers only; no PII collected or exposed.</td></tr>
+        <tr><td>Fairness</td><td>GPS fallback to district centroids reviewed for disparate treatment across districts.</td></tr>
+        <tr><td>Accuracy</td><td>Fallback cases explicitly logged in an audit table.</td></tr>
+        <tr><td>Accountability</td><td>Fully reproducible, auditable pipeline; quarterly re-validation recommended.</td></tr>
+        <tr><td>Transparency</td><td>Feature importance and MAE band surfaced alongside every prediction.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Explore the Data</h2>
+    <div class="card">
+      <p>View the interactive GPS map of geocoded rental transactions and amenity proximity:</p>
+      <a class="btn" href="map.html">Open Interactive Map &rarr;</a>
+      <div class="stack">
+        <span class="pill">Python</span>
+        <span class="pill">Pandas / NumPy</span>
+        <span class="pill">scikit-learn</span>
+        <span class="pill">XGBoost</span>
+        <span class="pill">Folium</span>
+        <span class="pill">OneMap API</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  &copy; 2026 Tan Tien Hock &mdash; ITD224 Applied Data Science Project | MIT License
+</footer>
+
+</body>
+</html>
